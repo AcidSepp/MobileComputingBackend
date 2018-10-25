@@ -1,4 +1,6 @@
-package de.generosoft.mobileComputingBackend.rest;
+package de.generosoft.mobileComputingBackend.db;
+
+import de.generosoft.mobileComputingBackend.db.Message;
 
 public class Messages {
 

@@ -9,8 +9,7 @@ import java.util.List;
 
 public class DatabaseManager {
 
-    private static @Nullable
-    DatabaseManager INSTANCE;
+    private static @Nullable DatabaseManager INSTANCE;
 
     public static @NotNull DatabaseManager getInstance() throws SQLException, ClassNotFoundException {
         if (INSTANCE == null) {
@@ -19,27 +18,22 @@ public class DatabaseManager {
         return INSTANCE;
     }
 
-    private static final @NotNull
-    String DATABASE_URL = "jdbc:postgresql:mobileComputing";
-    private static final @NotNull
-    String USERNAME = "postgres";
-    private static final @NotNull
-    String PASSWORD = "wabern";
+    private static final @NotNull String DATABASE_URL = "jdbc:postgresql:mobileComputing";
+    private static final @NotNull String USERNAME = "postgres";
+    private static final @NotNull String PASSWORD = "wabern";
 
-    private final @NotNull
-    Connection database;
+    private final @NotNull Connection database;
 
     public DatabaseManager() throws ClassNotFoundException, SQLException {
         Class.forName("org.postgresql.Driver");
         database = DriverManager.getConnection(DATABASE_URL, USERNAME, PASSWORD);
     }
 
-    public @NotNull List<Classroom> getAllClassroomsForStudent(final @NotNull String studentMail) throws SQLException {
+    public @NotNull Classrooms getClassroomsForStudent(final @NotNull String studentMail) throws SQLException {
         final LinkedList<Classroom> classrooms = new LinkedList<>();
-        final String query =
-                "select subscribes.ClassRoomName, ClassRooms.LecturerMail from \n" +
-                        "subscribes join ClassRooms on ClassRooms.ClassRoomName = subscribes.ClassRoomName\n" +
-                        "where subscribes.Subscriber = ?";
+        final String query = "select subscribes.ClassRoomName, ClassRooms.LecturerMail from \n" +
+                "subscribes join ClassRooms on ClassRooms.ClassRoomName = subscribes.ClassRoomName\n" +
+                "where subscribes.Subscriber = ?";
         final PreparedStatement preparedStatement = database.prepareStatement(query);
         preparedStatement.setString(1, studentMail);
         final ResultSet resultSet = preparedStatement.executeQuery();
@@ -47,10 +41,13 @@ public class DatabaseManager {
             final Classroom classroom = new Classroom(resultSet.getString(1), resultSet.getString(2));
             classrooms.add(classroom);
         }
-        return classrooms;
+        final Classroom[] classroomsArray = new Classroom[classrooms.size()];
+        classrooms.toArray(classroomsArray);
+        return new Classrooms(classroomsArray);
     }
 
-    public @Nullable String validateCredentials(final @NotNull String email, final @NotNull String password) throws SQLException {
+    public @NotNull String validateCredentials(final @NotNull String email, final @NotNull String password)
+            throws SQLException {
         final String query = "select Persons.role from Persons where Email = ? and PWord = ?;";
         final PreparedStatement preparedStatement = database.prepareStatement(query);
         preparedStatement.setString(1, email);
@@ -59,8 +56,27 @@ public class DatabaseManager {
         if (resultSet.next()) {
             return resultSet.getString(1);
         } else {
-            return "invalid credentials";
+            throw new IllegalArgumentException("invalid credentials");
         }
+    }
+
+    public @NotNull Messages getMessagesForStudent(final @NotNull String studentMail) throws SQLException {
+        final LinkedList<Message> messages = new LinkedList<>();
+        final String query =
+                "select MessageID, subscribes.classRoomName, payload from (subscribes join messages on subscribes.ClassRoomName = messages.ClassRoomName) where Subscriber = ?;";
+        final PreparedStatement preparedStatement = database.prepareStatement(query);
+        preparedStatement.setString(1, studentMail);
+        final ResultSet resultSet = preparedStatement.executeQuery();
+        while (resultSet.next()) {
+            final int messageID = resultSet.getInt(1);
+            final String classRoomName = resultSet.getString(2);
+            final String payload = resultSet.getString(3);
+            final Message message = new Message(messageID, classRoomName, payload);
+            messages.add(message);
+        }
+        final Message[] messagesArray = new Message[messages.size()];
+        messages.toArray(messagesArray);
+        return new Messages(messagesArray);
     }
 
     public void closeDatabase() throws SQLException {
