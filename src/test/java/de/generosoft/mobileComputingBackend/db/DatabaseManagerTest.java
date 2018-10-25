@@ -1,14 +1,23 @@
 package de.generosoft.mobileComputingBackend.db;
 
 import org.junit.Assert;
+import org.junit.Before;
 import org.junit.Test;
 
 import javax.xml.crypto.Data;
+import java.io.FileNotFoundException;
 import java.sql.DatabaseMetaData;
 import java.sql.SQLException;
 import java.util.List;
 
 public class DatabaseManagerTest {
+
+    @Before
+    public void before() throws SQLException, ClassNotFoundException, FileNotFoundException {
+        DatabaseManager dm = new DatabaseManager();
+        dm.execute("D:\\Studium\\Master\\MobileComputing\\Backend\\src\\test\\resources\\database.sql");
+        dm.closeDatabase();
+    }
 
     @Test
     public void testDatabaseConnection() throws SQLException, ClassNotFoundException {

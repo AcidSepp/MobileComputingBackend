@@ -3,9 +3,12 @@ package de.generosoft.mobileComputingBackend.db;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.sql.*;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Scanner;
 
 public class DatabaseManager {
 
@@ -81,5 +84,12 @@ public class DatabaseManager {
 
     public void closeDatabase() throws SQLException {
         database.close();
+    }
+
+    public void execute(final @NotNull String path) throws SQLException, FileNotFoundException {
+        final File file = new File(path);
+        final String sql = new Scanner(file).useDelimiter("\\Z").next();
+        final PreparedStatement preparedStatement = database.prepareStatement(sql);
+        preparedStatement.execute();
     }
 }

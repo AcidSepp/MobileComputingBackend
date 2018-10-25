@@ -1,6 +1,5 @@
 package de.generosoft.mobileComputingBackend.db;
 
-import de.generosoft.mobileComputingBackend.db.Classroom;
 import org.jetbrains.annotations.NotNull;
 
 public class Classrooms {
