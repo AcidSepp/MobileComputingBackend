@@ -1,16 +1,17 @@
 package de.generosoft.mobileComputingBackend.db;
 
 import de.generosoft.mobileComputingBackend.db.Message;
+import org.jetbrains.annotations.NotNull;
 
 public class Messages {
 
-    private Message[] messages;
+    private final @NotNull Message[] messages;
 
     public Messages(final Message[] messages) {
         this.messages = messages;
     }
 
-    public Message[] getMessages() {
+    public @NotNull Message[] getMessages() {
         return messages;
     }
 }

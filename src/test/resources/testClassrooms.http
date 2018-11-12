@@ -1,4 +1,4 @@
-GET http://localhost:8080/classrooms
+POST http://localhost:8080/classrooms
 Accept: application/json
 Cache-Control: no-cache
 Content-Type: application/json
