@@ -10,4 +10,7 @@ public class Login {
         this.role = role;
     }
 
+    public String getRole() {
+        return role;
+    }
 }

@@ -13,7 +13,7 @@ import java.sql.SQLException;
 @RestController
 public class MessagesController {
 
-    @RequestMapping(value = "/messages", method = RequestMethod.GET)
+    @RequestMapping(value = "/messages", method = RequestMethod.POST)
     public Messages messages(@RequestBody final Credentials credentials) throws SQLException, ClassNotFoundException {
         final DatabaseManager databaseManager = DatabaseManager.getInstance();
         final String role = databaseManager.validateCredentials(credentials.getEmail(), credentials.getPassword());

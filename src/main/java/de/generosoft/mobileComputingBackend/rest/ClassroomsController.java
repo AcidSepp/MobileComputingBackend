@@ -13,7 +13,7 @@ import java.sql.SQLException;
 @RestController
 public class ClassroomsController {
 
-    @RequestMapping(value = "/classrooms", method = RequestMethod.GET)
+    @RequestMapping(value = "/classrooms", method = RequestMethod.POST)
     public Classrooms classrooms(@RequestBody final Credentials credentials) throws SQLException, ClassNotFoundException {
         final DatabaseManager databaseManager = DatabaseManager.getInstance();
         final String role = databaseManager.validateCredentials(credentials.getEmail(), credentials.getPassword());
