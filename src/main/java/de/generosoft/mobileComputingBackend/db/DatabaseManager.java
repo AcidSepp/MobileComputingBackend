@@ -86,10 +86,37 @@ public class DatabaseManager {
         database.close();
     }
 
-    public void execute(final @NotNull String path) throws SQLException, FileNotFoundException {
+    public void executeSqlFile(final @NotNull String path) throws SQLException, FileNotFoundException {
         final File file = new File(path);
         final String sql = new Scanner(file).useDelimiter("\\Z").next();
         final PreparedStatement preparedStatement = database.prepareStatement(sql);
         preparedStatement.execute();
     }
+
+    public void subscribe(final @NotNull String studentMail, final @NotNull String password, final @NotNull String subject)
+            throws SQLException {
+        final String role = validateCredentials(studentMail, password);
+        if (!role.equals("student")) {
+            throw new IllegalArgumentException("subscriber is not of role student");
+        }
+        final PreparedStatement preparedStatement =
+                database.prepareStatement("insert into subscribes values(?, ?);");
+        preparedStatement.setString(1, studentMail);
+        preparedStatement.setString(2, subject);
+        preparedStatement.execute();
+    }
+
+    public void unsubscribe(final @NotNull String studentMail, final @NotNull String password, final @NotNull String subject)
+            throws SQLException {
+        final String role = validateCredentials(studentMail, password);
+        if (!role.equals("student")) {
+            throw new IllegalArgumentException("subscriber is not of role student");
+        }
+        final PreparedStatement preparedStatement =
+                database.prepareStatement("delete from subscribes where subscriber = ? and classroomname = ?");
+        preparedStatement.setString(1, studentMail);
+        preparedStatement.setString(2, subject);
+        preparedStatement.execute();
+    }
+
 }

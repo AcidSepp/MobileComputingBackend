@@ -3,7 +3,7 @@ drop table Persons cascade;
 drop table ClassRooms cascade;
 drop table subscribes cascade;
 
-CREATE TABLE Persons (
+create table Persons (
   Email varchar(255),
   PWord varchar(255),
   Role varchar(255),
@@ -32,12 +32,16 @@ create table subscribes (
   foreign key (ClassRoomName) references ClassRooms(ClassRoomName)
 );
 
+alter table subscribes
+  add constraint unique_subscribes unique(Subscriber, ClassRoomName);
+
 insert into Persons values('student@haw-landshut.de', 'password', 'student');
 insert into Persons values('lecturer@haw-landshut.de', 'password', 'lecturer');
 
 insert into ClassRooms values('Mobile Computing', 'lecturer@haw-landshut.de');
 insert into ClassRooms values('Bildverstehen', 'lecturer@haw-landshut.de');
 insert into ClassRooms values('Human Computer Interface', 'lecturer@haw-landshut.de');
+insert into ClassRooms values('Hardware Software Codesign', 'lecturer@haw-landshut.de');
 
 insert into subscribes values('student@haw-landshut.de', 'Mobile Computing');
 insert into subscribes values('student@haw-landshut.de', 'Bildverstehen');

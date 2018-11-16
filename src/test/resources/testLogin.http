@@ -4,6 +4,6 @@ Cache-Control: no-cache
 Content-Type: application/json
 data: jsonString
 
-{"email": "student@haw-landshut.de", "password": "passwd"}
+{"email": "student@haw-landshut.de", "password": "password"}
 
 ###
