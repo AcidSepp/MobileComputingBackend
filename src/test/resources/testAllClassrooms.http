@@ -1,0 +1,9 @@
+POST http://localhost:8080/allClassrooms
+Accept: application/json
+Cache-Control: no-cache
+Content-Type: application/json
+data: jsonString
+
+{"email": "student@haw-landshut.de", "password": "password"}
+
+###

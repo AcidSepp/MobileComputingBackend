@@ -51,3 +51,4 @@ insert into Messages(ClassRoomName, Payload) values('Mobile Computing', 'Die Vor
 insert into Messages(ClassRoomName, Payload) values('Mobile Computing', 'In den Fluss');
 insert into Messages(ClassRoomName, Payload) values('Mobile Computing', 'Android ist super');
 insert into Messages(ClassRoomName, Payload) values('Bildverstehen', 'Vorzeichen sind glückssache');
+insert into Messages(ClassRoomName, Payload) values('Hardware Software Codesign', 'Anime sind super super toll *knuff*');

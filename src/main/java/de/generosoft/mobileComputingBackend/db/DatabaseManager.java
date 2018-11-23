@@ -7,7 +7,6 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.sql.*;
 import java.util.LinkedList;
-import java.util.List;
 import java.util.Scanner;
 
 public class DatabaseManager {
@@ -32,7 +31,13 @@ public class DatabaseManager {
         database = DriverManager.getConnection(DATABASE_URL, USERNAME, PASSWORD);
     }
 
-    public @NotNull Classrooms getClassroomsForStudent(final @NotNull String studentMail) throws SQLException {
+    public @NotNull Classrooms getSubscribedClassroomsForStudent(final @NotNull String studentMail,
+                                                                 final @NotNull String password) throws SQLException {
+        final String role = validateCredentials(studentMail, password);
+        if (!role.equals("student")) {
+            throw new IllegalArgumentException("subscriber is not of role student");
+        }
+
         final LinkedList<Classroom> classrooms = new LinkedList<>();
         final String query = "select subscribes.ClassRoomName, ClassRooms.LecturerMail from \n" +
                 "subscribes join ClassRooms on ClassRooms.ClassRoomName = subscribes.ClassRoomName\n" +
@@ -41,7 +46,7 @@ public class DatabaseManager {
         preparedStatement.setString(1, studentMail);
         final ResultSet resultSet = preparedStatement.executeQuery();
         while (resultSet.next()) {
-            final Classroom classroom = new Classroom(resultSet.getString(1), resultSet.getString(2));
+            final Classroom classroom = new Classroom(resultSet.getString(1), resultSet.getString(2), true);
             classrooms.add(classroom);
         }
         final Classroom[] classroomsArray = new Classroom[classrooms.size()];
@@ -63,7 +68,12 @@ public class DatabaseManager {
         }
     }
 
-    public @NotNull Messages getMessagesForStudent(final @NotNull String studentMail) throws SQLException {
+    public @NotNull Messages getMessagesForStudent(final @NotNull String studentMail, final @NotNull String password) throws SQLException {
+        final String role = validateCredentials(studentMail, password);
+        if (!role.equals("student")) {
+            throw new IllegalArgumentException("subscriber is not of role student");
+        }
+
         final LinkedList<Message> messages = new LinkedList<>();
         final String query =
                 "select MessageID, subscribes.classRoomName, payload from (subscribes join messages on subscribes.ClassRoomName = messages.ClassRoomName) where Subscriber = ?;";
@@ -93,30 +103,56 @@ public class DatabaseManager {
         preparedStatement.execute();
     }
 
-    public void subscribe(final @NotNull String studentMail, final @NotNull String password, final @NotNull String subject)
-            throws SQLException {
+    public void subscribe(final @NotNull String studentMail, final @NotNull String password,
+                          final @NotNull String classroom) throws SQLException {
         final String role = validateCredentials(studentMail, password);
         if (!role.equals("student")) {
             throw new IllegalArgumentException("subscriber is not of role student");
         }
-        final PreparedStatement preparedStatement =
-                database.prepareStatement("insert into subscribes values(?, ?);");
+
+        final PreparedStatement preparedStatement = database.prepareStatement("insert into subscribes values(?, ?);");
         preparedStatement.setString(1, studentMail);
-        preparedStatement.setString(2, subject);
+        preparedStatement.setString(2, classroom);
         preparedStatement.execute();
     }
 
-    public void unsubscribe(final @NotNull String studentMail, final @NotNull String password, final @NotNull String subject)
-            throws SQLException {
+    public void unsubscribe(final @NotNull String studentMail, final @NotNull String password,
+                            final @NotNull String classroom) throws SQLException {
+
         final String role = validateCredentials(studentMail, password);
         if (!role.equals("student")) {
             throw new IllegalArgumentException("subscriber is not of role student");
         }
+
         final PreparedStatement preparedStatement =
                 database.prepareStatement("delete from subscribes where subscriber = ? and classroomname = ?");
         preparedStatement.setString(1, studentMail);
-        preparedStatement.setString(2, subject);
+        preparedStatement.setString(2, classroom);
         preparedStatement.execute();
+    }
+
+    public Classrooms getAllClassroomsForStudent(final @NotNull String studentMail, final @NotNull String password)
+            throws SQLException {
+
+        final String role = validateCredentials(studentMail, password);
+        if (!role.equals("student")) {
+            throw new IllegalArgumentException("user is not of role student");
+        }
+
+        final LinkedList<Classroom> classrooms = new LinkedList<>();
+        final PreparedStatement preparedStatement = database.prepareStatement(
+                "select ClassRooms.ClassRoomName, ClassRooms.LecturerMail, subscribes.subscriber from subscribes right join ClassRooms on ClassRooms.ClassRoomName = subscribes.ClassRoomName where subscriber = ? or subscriber is null");
+        preparedStatement.setString(1, studentMail);
+        final ResultSet resultSet = preparedStatement.executeQuery();
+        while(resultSet.next()) {
+            final String classRoomName = resultSet.getString(1);
+            final String lecturer = resultSet.getString(2);
+            final boolean subscribed = resultSet.getString(3) != null;
+            classrooms.add(new Classroom(classRoomName, lecturer, subscribed));
+        }
+        final Classroom[] classroomsArray = new Classroom[classrooms.size()];
+        classrooms.toArray(classroomsArray);
+        return new Classrooms(classroomsArray);
     }
 
 }

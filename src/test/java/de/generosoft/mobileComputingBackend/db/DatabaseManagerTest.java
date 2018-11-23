@@ -9,6 +9,7 @@ import org.junit.Test;
 
 import java.io.FileNotFoundException;
 import java.sql.SQLException;
+import java.util.LinkedList;
 
 public class DatabaseManagerTest {
 
@@ -33,8 +34,8 @@ public class DatabaseManagerTest {
     }
 
     @Test
-    public void testGetAllClassroomsForStudent() throws SQLException {
-        final Classrooms classroomsForStudent = databaseManager.getClassroomsForStudent("student@haw-landshut.de");
+    public void testGetSubscribedClassroomsForStudent() throws SQLException {
+        final Classrooms classroomsForStudent = databaseManager.getSubscribedClassroomsForStudent("student@haw-landshut.de", "password");
         Assert.assertEquals(classroomsForStudent.getClassrooms().length, 3);
     }
 
@@ -58,7 +59,7 @@ public class DatabaseManagerTest {
 
     @Test
     public void testGetMessagesForStudent() throws SQLException {
-        final Messages messagesForStudent = databaseManager.getMessagesForStudent("student@haw-landshut.de");
+        final Messages messagesForStudent = databaseManager.getMessagesForStudent("student@haw-landshut.de", "password");
         Assert.assertEquals(messagesForStudent.getMessages().length, 4);
     }
 
@@ -100,6 +101,15 @@ public class DatabaseManagerTest {
     @Test
     public void testUnsubscribeNonExistentClassroom() throws SQLException {
         databaseManager.unsubscribe("student@haw-landshut.de", "password", "Generic Nonexistent Classroom");
+    }
+
+    @Test
+    public void testGetAllClassrooms() throws SQLException {
+        final Classrooms classrooms = databaseManager.getAllClassroomsForStudent("student@haw-landshut.de", "password");
+        Assert.assertTrue("subscribed classrooms received as unsubscribed", classrooms.getClassrooms()[0].getSubscribed());
+        Assert.assertTrue("subscribed classrooms received as unsubscribed", classrooms.getClassrooms()[1].getSubscribed());
+        Assert.assertTrue("subscribed classrooms received as unsubscribed", classrooms.getClassrooms()[2].getSubscribed());
+        Assert.assertTrue("unsubscribed classrooms received as subscribed", !classrooms.getClassrooms()[3].getSubscribed());
     }
 
 }
