@@ -54,3 +54,4 @@ insert into Messages(ClassRoomName, Payload) values('Mobile Computing', 'In den 
 insert into Messages(ClassRoomName, Payload) values('Mobile Computing', 'Android ist super');
 insert into Messages(ClassRoomName, Payload) values('Bildverstehen', 'Vorzeichen sind glückssache');
 insert into Messages(ClassRoomName, Payload) values('Generic Not Belonging Classroom', 'Generic Message');
+insert into Messages(ClassRoomName, Payload) values('Generic Empty Classroom', 'Generic Message');

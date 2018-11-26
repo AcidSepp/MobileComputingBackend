@@ -1,10 +1,7 @@
 package de.generosoft.mobileComputingBackend.rest;
 
-import de.generosoft.mobileComputingBackend.pojo.ClassroomCreationBody;
-import de.generosoft.mobileComputingBackend.pojo.Classrooms;
-import de.generosoft.mobileComputingBackend.pojo.Credentials;
+import de.generosoft.mobileComputingBackend.pojo.*;
 import de.generosoft.mobileComputingBackend.db.DatabaseManager;
-import de.generosoft.mobileComputingBackend.pojo.Success;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -38,9 +35,17 @@ public class ClassroomsController {
     }
 
     @RequestMapping(value = "/create", method = RequestMethod.POST)
-    public Success createClassroom(@RequestBody final ClassroomCreationBody body) throws SQLException, ClassNotFoundException {
+    public Success createClassroom(@RequestBody final CreateClassroomBody body) throws SQLException, ClassNotFoundException {
         final DatabaseManager databaseManager = DatabaseManager.getInstance();
         databaseManager.createClassroom(body);
+        logger.info(body.getEmail() + " created classroom " + body.getClassroomName());
+        return new Success();
+    }
+
+    @RequestMapping(value = "/delete", method = RequestMethod.POST)
+    public Success deleteClassroom(@RequestBody final DeleteClassroomBody body) throws SQLException, ClassNotFoundException {
+        final DatabaseManager databaseManager = DatabaseManager.getInstance();
+        databaseManager.deleteClassroom(body);
         logger.info(body.getEmail() + " created classroom " + body.getClassroomName());
         return new Success();
     }

@@ -153,7 +153,7 @@ public class DatabaseManager {
         return new Classrooms(classroomsArray);
     }
 
-    public void createClassroom(final @NotNull ClassroomCreationBody body) throws SQLException {
+    public void createClassroom(final @NotNull CreateClassroomBody body) throws SQLException {
         final String role = validateCredentials(body);
         if (!"lecturer".equals(role)) {
             throw new IllegalArgumentException("user is not of role lecturer");
@@ -200,6 +200,25 @@ public class DatabaseManager {
         }
         final PreparedStatement preparedStatement = database.prepareStatement("delete from Messages where messageId = ?;");
         preparedStatement.setInt(1, body.getMessageId());
+        preparedStatement.execute();
+    }
+
+    public void deleteClassroom(final @NotNull DeleteClassroomBody body) throws SQLException {
+        final String role = validateCredentials(body);
+        if (!"lecturer".equals(role)) {
+            throw new IllegalArgumentException("user is not of role lecturer");
+        }
+        final PreparedStatement statement = database.prepareStatement("select lecturermail from ClassRooms where ClassroomName = ?;");
+        statement.setString(1, body.getClassroomName());
+        final ResultSet resultSet = statement.executeQuery();
+        if (!resultSet.next()) {
+            throw new IllegalArgumentException("Classroom " + body.getClassroomName() + " does not exist");
+        }
+        if (!resultSet.getString(1).equals(body.getEmail())) {
+            throw new IllegalArgumentException("Classroom  " + body.getClassroomName() + " does not belong to lecturer " + body.getEmail());
+        }
+        final PreparedStatement preparedStatement = database.prepareStatement("delete from Messages where classroomName = ?;");
+        preparedStatement.setString(1, body.getClassroomName());
         preparedStatement.execute();
     }
 }

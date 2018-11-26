@@ -135,22 +135,22 @@ public class DatabaseManagerTest {
 
     @Test
     public void testCreateClassroom() throws SQLException {
-        final ClassroomCreationBody body =
-                new ClassroomCreationBody(validLecturer.getEmail(), validLecturer.getPassword(), "Generic New Classroom");
+        final CreateClassroomBody body =
+                new CreateClassroomBody(validLecturer.getEmail(), validLecturer.getPassword(), "Generic New Classroom");
         databaseManager.createClassroom(body);
     }
 
     @Test(expected = SQLException.class)
     public void testCreateAlreadyExistingClassroom() throws SQLException {
-        final ClassroomCreationBody body =
-                new ClassroomCreationBody(validLecturer.getEmail(), validLecturer.getPassword(), "Generic Empty Classroom");
+        final CreateClassroomBody body =
+                new CreateClassroomBody(validLecturer.getEmail(), validLecturer.getPassword(), "Generic Empty Classroom");
         databaseManager.createClassroom(body);
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void testStudentCreatesClassroom() throws SQLException {
-        final ClassroomCreationBody body =
-                new ClassroomCreationBody(validStudent.getEmail(), validStudent.getPassword(), "Generic New Classroom");
+        final CreateClassroomBody body =
+                new CreateClassroomBody(validStudent.getEmail(), validStudent.getPassword(), "Generic New Classroom");
         databaseManager.createClassroom(body);
     }
 
@@ -193,4 +193,27 @@ public class DatabaseManagerTest {
         databaseManager.deleteMessage(body);
     }
 
+    @Test
+    public void testDeleteClassroom() throws SQLException {
+        final DeleteClassroomBody body =
+                new DeleteClassroomBody(validLecturer.getEmail(), validLecturer.getPassword(),
+                        "Generic Empty Classroom");
+        databaseManager.deleteClassroom(body);
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void testDeleteNotBelongingClassroom() throws SQLException {
+        final DeleteClassroomBody body =
+                new DeleteClassroomBody(validLecturer.getEmail(), validLecturer.getPassword(),
+                        "Generic Not Belonging Classroom");
+        databaseManager.deleteClassroom(body);
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void testDeleteNonExistentClassroom() throws SQLException {
+        final DeleteClassroomBody body =
+                new DeleteClassroomBody(validLecturer.getEmail(), validLecturer.getPassword(),
+                        "Generic Non Existent Classroom");
+        databaseManager.deleteClassroom(body);
+    }
 }

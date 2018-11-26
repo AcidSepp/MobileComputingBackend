@@ -2,14 +2,14 @@ package de.generosoft.mobileComputingBackend.pojo;
 
 import org.jetbrains.annotations.NotNull;
 
-public class ClassroomCreationBody extends Credentials {
+public class CreateClassroomBody extends Credentials {
 
     private @NotNull String classroomName;
 
-    public ClassroomCreationBody() {
+    public CreateClassroomBody() {
     }
 
-    public ClassroomCreationBody(final @NotNull String email, @NotNull final String password, final @NotNull String classroomName) {
+    public CreateClassroomBody(final @NotNull String email, @NotNull final String password, final @NotNull String classroomName) {
         super(email, password);
         this.classroomName = classroomName;
     }

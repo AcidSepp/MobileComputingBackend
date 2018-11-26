@@ -1,0 +1,19 @@
+POST http://localhost:8080/classrooms/create
+Accept: application/json
+Cache-Control: no-cache
+Content-Type: application/json
+data: jsonString
+
+{"email": "lecturer@haw-landshut.de", "password": "password", "classroomName": "Generic New Classroom"}
+
+###
+
+POST http://localhost:8080/classrooms/delete
+Accept: application/json
+Cache-Control: no-cache
+Content-Type: application/json
+data: jsonString
+
+{"email": "lecturer@haw-landshut.de", "password": "password", "classroomName": "Generic New Classroom"}
+
+###
