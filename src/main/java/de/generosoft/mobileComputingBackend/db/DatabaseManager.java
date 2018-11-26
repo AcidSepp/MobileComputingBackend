@@ -183,4 +183,23 @@ public class DatabaseManager {
         preparedStatement.setString(2, body.getPayload());
         preparedStatement.execute();
     }
+
+    public void deleteMessage(final @NotNull DeleteMessageBody body) throws SQLException {
+        final String role = validateCredentials(body);
+        if (!"lecturer".equals(role)) {
+            throw new IllegalArgumentException("user is not of role lecturer");
+        }
+        final PreparedStatement statement = database.prepareStatement("select lecturermail from Messages join Classrooms on Messages.ClassroomName = Classrooms.ClassroomName where MessageId = ?;");
+        statement.setInt(1, body.getMessageId());
+        final ResultSet resultSet = statement.executeQuery();
+        if (!resultSet.next()) {
+            throw new IllegalArgumentException("Message #" + body.getMessageId() + " does not exist");
+        }
+        if (!resultSet.getString(1).equals(body.getEmail())) {
+            throw new IllegalArgumentException("Message  #" + body.getMessageId() + " does not belong to lecturer " + body.getEmail());
+        }
+        final PreparedStatement preparedStatement = database.prepareStatement("delete from Messages where messageId = ?;");
+        preparedStatement.setInt(1, body.getMessageId());
+        preparedStatement.execute();
+    }
 }

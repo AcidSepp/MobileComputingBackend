@@ -37,11 +37,13 @@ alter table subscribes
 
 insert into Persons values('student@haw-landshut.de', 'password', 'student');
 insert into Persons values('lecturer@haw-landshut.de', 'password', 'lecturer');
+insert into Persons values('gernericLecturer@haw-landshut.de', 'password', 'lecturer');
 
 insert into ClassRooms values('Mobile Computing', 'lecturer@haw-landshut.de');
 insert into ClassRooms values('Bildverstehen', 'lecturer@haw-landshut.de');
 insert into ClassRooms values('Human Computer Interface', 'lecturer@haw-landshut.de');
 insert into ClassRooms values('Generic Empty Classroom', 'lecturer@haw-landshut.de');
+insert into ClassRooms values('Generic Not Belonging Classroom', 'gernericLecturer@haw-landshut.de');
 
 insert into subscribes values('student@haw-landshut.de', 'Mobile Computing');
 insert into subscribes values('student@haw-landshut.de', 'Bildverstehen');
@@ -51,3 +53,4 @@ insert into Messages(ClassRoomName, Payload) values('Mobile Computing', 'Die Vor
 insert into Messages(ClassRoomName, Payload) values('Mobile Computing', 'In den Fluss');
 insert into Messages(ClassRoomName, Payload) values('Mobile Computing', 'Android ist super');
 insert into Messages(ClassRoomName, Payload) values('Bildverstehen', 'Vorzeichen sind glückssache');
+insert into Messages(ClassRoomName, Payload) values('Generic Not Belonging Classroom', 'Generic Message');

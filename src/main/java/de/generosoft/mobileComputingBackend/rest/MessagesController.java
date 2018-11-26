@@ -1,10 +1,7 @@
 package de.generosoft.mobileComputingBackend.rest;
 
-import de.generosoft.mobileComputingBackend.pojo.Credentials;
+import de.generosoft.mobileComputingBackend.pojo.*;
 import de.generosoft.mobileComputingBackend.db.DatabaseManager;
-import de.generosoft.mobileComputingBackend.pojo.Messages;
-import de.generosoft.mobileComputingBackend.pojo.PostMessageBody;
-import de.generosoft.mobileComputingBackend.pojo.Success;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -33,6 +30,14 @@ public class MessagesController {
         final DatabaseManager databaseManager = DatabaseManager.getInstance();
         logger.info(body.getEmail() + " posted message in classroom " + body.getClassroomName());
         databaseManager.postMessage(body);
+        return new Success();
+    }
+
+    @RequestMapping(value = "/delete", method = RequestMethod.POST)
+    public Success post(@RequestBody final DeleteMessageBody body) throws SQLException, ClassNotFoundException {
+        final DatabaseManager databaseManager = DatabaseManager.getInstance();
+        logger.info(body.getEmail() + " deleted message #" + body.getMessageId());
+        databaseManager.deleteMessage(body);
         return new Success();
     }
 

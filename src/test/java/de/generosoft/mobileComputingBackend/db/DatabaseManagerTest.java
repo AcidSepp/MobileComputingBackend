@@ -162,4 +162,35 @@ public class DatabaseManagerTest {
         databaseManager.postMessage(body);
     }
 
+    @Test(expected = IllegalArgumentException.class)
+    public void testPostMessageNonexistentClassroom() throws SQLException {
+        final PostMessageBody body =
+                new PostMessageBody(validLecturer.getEmail(), validLecturer.getPassword(), "Generic Nonexistent Classroom",
+                        "Generic Message");
+        databaseManager.postMessage(body);
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void testPostMessageNotBelongingToLecturer() throws SQLException {
+
+        final PostMessageBody body =
+                new PostMessageBody(validLecturer.getEmail(), validLecturer.getPassword(), "Generic Not Belonging Classroom",
+                        "Generic Message");
+        databaseManager.postMessage(body);
+    }
+
+    @Test()
+    public void testDeleteMessage() throws SQLException {
+        final DeleteMessageBody body =
+                new DeleteMessageBody(validLecturer.getEmail(), validLecturer.getPassword(), 1);
+        databaseManager.deleteMessage(body);
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void testDeleteNotBelongingMessage() throws SQLException {
+        final DeleteMessageBody body =
+                new DeleteMessageBody(validLecturer.getEmail(), validLecturer.getPassword(), 5);
+        databaseManager.deleteMessage(body);
+    }
+
 }
