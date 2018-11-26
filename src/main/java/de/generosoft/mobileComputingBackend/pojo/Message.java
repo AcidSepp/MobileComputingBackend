@@ -1,4 +1,4 @@
-package de.generosoft.mobileComputingBackend.db;
+package de.generosoft.mobileComputingBackend.pojo;
 
 import org.jetbrains.annotations.NotNull;
 

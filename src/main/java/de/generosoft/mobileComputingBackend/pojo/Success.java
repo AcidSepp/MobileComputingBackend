@@ -1,4 +1,4 @@
-package de.generosoft.mobileComputingBackend.rest;
+package de.generosoft.mobileComputingBackend.pojo;
 
 public class Success {
 

@@ -1,0 +1,9 @@
+POST http://localhost:8080/messages/post
+Accept: application/json
+Cache-Control: no-cache
+Content-Type: application/json
+data: jsonString
+
+{"email": "lecturer@haw-landshut.de", "password": "password", "classroomName": "Bildverstehen", "payload": "Ich check das Praktikum immer noch nicht"}
+
+###

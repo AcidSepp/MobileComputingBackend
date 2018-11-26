@@ -1,10 +1,10 @@
-package de.generosoft.mobileComputingBackend.db;
+package de.generosoft.mobileComputingBackend.pojo;
 
 import org.jetbrains.annotations.NotNull;
 
 public class Classrooms {
 
-    private Classroom[] classrooms;
+    private @NotNull Classroom[] classrooms;
 
     public Classrooms(final @NotNull Classroom[] classrooms) {
         this.classrooms = classrooms;

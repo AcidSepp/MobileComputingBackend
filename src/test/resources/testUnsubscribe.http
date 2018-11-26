@@ -1,4 +1,4 @@
-POST http://localhost:8080/unsubscribe
+POST http://localhost:8080/classrooms/unsubscribe
 Accept: application/json
 Cache-Control: no-cache
 Content-Type: application/json
