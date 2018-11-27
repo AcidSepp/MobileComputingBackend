@@ -48,7 +48,7 @@ insert into subscribes values('student@haw-landshut.de', 'Bildverstehen');
 insert into subscribes values('student@haw-landshut.de', 'Human Computer Interface');
 
 insert into Messages(ClassRoomName, Payload) values('Mobile Computing', 'Die Vorlesung fällt diese Woche aus');
-insert into Messages(ClassRoomName, Payload) values('Mobile Computing', 'In den Fluss');
 insert into Messages(ClassRoomName, Payload) values('Mobile Computing', 'Android ist super');
 insert into Messages(ClassRoomName, Payload) values('Bildverstehen', 'Vorzeichen sind glückssache');
-insert into Messages(ClassRoomName, Payload) values('Hardware Software Codesign', 'Anime sind super super toll *knuff*');
+insert into Messages(ClassRoomName, Payload) values('Hardware Software Codesign', 'Die Vorlesung am 21.12 findet statt.');
+insert into Messages(ClassRoomName, Payload) values('Human Computer Interface', 'Gutes Design ist simpel');
