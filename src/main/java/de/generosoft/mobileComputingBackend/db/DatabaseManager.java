@@ -71,7 +71,7 @@ public class DatabaseManager {
     public @NotNull Messages getMessagesForStudent(final @NotNull Credentials credentials) throws SQLException {
         final String role = validateCredentials(credentials);
         if (!role.equals("student")) {
-            throw new IllegalArgumentException("subscriber is not of role student");
+            throw new IllegalArgumentException("user is not of role student");
         }
 
         final LinkedList<Message> messages = new LinkedList<>();
@@ -217,8 +217,32 @@ public class DatabaseManager {
         if (!resultSet.getString(1).equals(body.getEmail())) {
             throw new IllegalArgumentException("Classroom  " + body.getClassroomName() + " does not belong to lecturer " + body.getEmail());
         }
-        final PreparedStatement preparedStatement = database.prepareStatement("delete from Messages where classroomName = ?;");
-        preparedStatement.setString(1, body.getClassroomName());
-        preparedStatement.execute();
+        final PreparedStatement delete = database.prepareStatement("delete from Messages where classroomName = ?;" +
+                "delete from subscribes where classroomName = ?;" +
+                "delete from Classrooms where classroomName = ?;");
+        delete.setString(1, body.getClassroomName());
+        delete.setString(2, body.getClassroomName());
+        delete.setString(3, body.getClassroomName());
+        delete.execute();
+    }
+
+    public Classrooms getClassroomsForLecturer(final @NotNull Credentials credentials) throws SQLException {
+        final String role = validateCredentials(credentials);
+        if (!"lecturer".equals(role)) {
+            throw new IllegalArgumentException("user is not of role lecturer");
+        }
+        final LinkedList<Classroom> classrooms = new LinkedList<>();
+        final PreparedStatement preparedStatement = database.prepareStatement(
+                "select ClassRooms.ClassRoomName, ClassRooms.LecturerMail from ClassRooms where LecturerMail = ?;");
+        preparedStatement.setString(1, credentials.getEmail());
+        final ResultSet resultSet = preparedStatement.executeQuery();
+        while(resultSet.next()) {
+            final String classRoomName = resultSet.getString(1);
+            final String lecturer = resultSet.getString(2);
+            classrooms.add(new Classroom(classRoomName, lecturer, true));
+        }
+        final Classroom[] classroomsArray = new Classroom[classrooms.size()];
+        classrooms.toArray(classroomsArray);
+        return new Classrooms(classroomsArray);
     }
 }

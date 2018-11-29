@@ -46,8 +46,16 @@ public class ClassroomsController {
     public Success deleteClassroom(@RequestBody final DeleteClassroomBody body) throws SQLException, ClassNotFoundException {
         final DatabaseManager databaseManager = DatabaseManager.getInstance();
         databaseManager.deleteClassroom(body);
-        logger.info(body.getEmail() + " created classroom " + body.getClassroomName());
+        logger.info(body.getEmail() + " deleted classroom " + body.getClassroomName());
         return new Success();
+    }
+
+    @RequestMapping(value = "/owned", method = RequestMethod.POST)
+    public Classrooms deleteClassroom(@RequestBody final Credentials credentials) throws SQLException, ClassNotFoundException {
+        final DatabaseManager databaseManager = DatabaseManager.getInstance();
+        final Classrooms classrooms = databaseManager.getClassroomsForLecturer(credentials);
+        logger.info(credentials.getEmail() + " queried owned classrooms ");
+        return classrooms;
     }
 
 }

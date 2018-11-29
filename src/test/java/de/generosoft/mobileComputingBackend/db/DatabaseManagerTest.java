@@ -195,10 +195,13 @@ public class DatabaseManagerTest {
 
     @Test
     public void testDeleteClassroom() throws SQLException {
+        final int lengthBefore = databaseManager.getClassroomsForLecturer(validLecturer).getClassrooms().length;
         final DeleteClassroomBody body =
                 new DeleteClassroomBody(validLecturer.getEmail(), validLecturer.getPassword(),
                         "Generic Empty Classroom");
         databaseManager.deleteClassroom(body);
+        final int lengthAfter = databaseManager.getClassroomsForLecturer(validLecturer).getClassrooms().length;
+        Assert.assertEquals("did not delete the right amount of classrooms", lengthBefore - lengthAfter, 1);
     }
 
     @Test(expected = IllegalArgumentException.class)
