@@ -17,6 +17,14 @@ public class MessagesController {
 
     private final Logger logger = LoggerFactory.getLogger(MessagesController.class);
 
+    @RequestMapping(value = "/classroom", method = RequestMethod.POST)
+    public Messages student(@RequestBody final MessagesInClassroomBody body) throws SQLException, ClassNotFoundException {
+        final DatabaseManager databaseManager = DatabaseManager.getInstance();
+        final Messages messages = databaseManager.getMessagesForClassroom(body);
+        logger.info(body.getEmail() + " queried messages for classroom " + body.getClassroomName());
+        return messages;
+    }
+
     @RequestMapping(value = "/student", method = RequestMethod.POST)
     public Messages student(@RequestBody final Credentials credentials) throws SQLException, ClassNotFoundException {
         final DatabaseManager databaseManager = DatabaseManager.getInstance();

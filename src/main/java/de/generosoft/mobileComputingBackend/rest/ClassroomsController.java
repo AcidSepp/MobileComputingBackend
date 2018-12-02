@@ -28,9 +28,9 @@ public class ClassroomsController {
     @RequestMapping(value = "/subscribed", method = RequestMethod.POST)
     public Classrooms subscribedClassrooms(@RequestBody final Credentials credentials) throws SQLException, ClassNotFoundException {
         final DatabaseManager databaseManager = DatabaseManager.getInstance();
-        logger.info(credentials.getEmail() + " queried subscribed classrooms");
         final Classrooms classrooms =
                 databaseManager.getSubscribedClassroomsForStudent(credentials);
+        logger.info(credentials.getEmail() + " queried subscribed classrooms");
         return classrooms;
     }
 
@@ -51,7 +51,7 @@ public class ClassroomsController {
     }
 
     @RequestMapping(value = "/owned", method = RequestMethod.POST)
-    public Classrooms deleteClassroom(@RequestBody final Credentials credentials) throws SQLException, ClassNotFoundException {
+    public Classrooms ownedClassroom(@RequestBody final Credentials credentials) throws SQLException, ClassNotFoundException {
         final DatabaseManager databaseManager = DatabaseManager.getInstance();
         final Classrooms classrooms = databaseManager.getClassroomsForLecturer(credentials);
         logger.info(credentials.getEmail() + " queried owned classrooms ");

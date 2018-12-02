@@ -65,7 +65,16 @@ public class DatabaseManagerTest {
     @Test
     public void testGetMessagesForStudent() throws SQLException {
         final Messages messagesForStudent = databaseManager.getMessagesForStudent(validStudent);
-        Assert.assertEquals(messagesForStudent.getMessages().length, 4);
+        Assert.assertEquals(4, messagesForStudent.getMessages().length);
+    }
+
+    @Test
+    public void testGetMessagesForClassroom() throws SQLException {
+        final MessagesInClassroomBody body =
+                new MessagesInClassroomBody(validLecturer.getEmail(), validLecturer.getPassword(),
+                        "Mobile Computing");
+        final Messages messages = databaseManager.getMessagesForClassroom(body);
+        Assert.assertEquals(3, messages.getMessages().length);
     }
 
     @Test
